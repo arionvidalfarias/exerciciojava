@@ -15,7 +15,13 @@ public class TelaClientes extends javax.swing.JInternalFrame {
         initComponents();
         conexao = ModuloConexao.conector();
     }
-
+    private void limpar(){
+        txtId.setText(null);
+        txtNome.setText(null);
+        txtEndereco.setText(null);
+        txtFone.setText(null);
+        txtEmail.setText(null);
+    }
     private void adicionar(){
         String sql = "INSERT INTO clientes(nomecli,endcli,fonecli,emailcli) VALUES(?,?,?,?)";
         try {
@@ -31,10 +37,7 @@ public class TelaClientes extends javax.swing.JInternalFrame {
                 int adicionado = pst.executeUpdate();
                 if (adicionado>0){
                     JOptionPane.showMessageDialog(null,"Cliente adicionado com sucesso!");
-                    txtNome.setText(null);
-                    txtEndereco.setText(null);
-                    txtFone.setText(null);
-                    txtEmail.setText(null);
+                    limpar();
                 }
             }
         } catch (Exception e) {
@@ -45,7 +48,7 @@ public class TelaClientes extends javax.swing.JInternalFrame {
     //método para pesquisar um cliente pelo nome
     private void pesquisar_cliente(){
         
-        String sql = "SELECT * FROM clientes WHERE nomecli LIKE ?";
+        String sql = "SELECT idcli AS ID, emailcli AS Email, endcli AS Endereço, fonecli AS Telefone, nomecli AS Nome FROM clientes WHERE nomecli LIKE ?";
         try {
             pst = conexao.prepareStatement(sql);
             //passando o conteúdo da caixa de pesquisa para o ?
@@ -84,11 +87,7 @@ public class TelaClientes extends javax.swing.JInternalFrame {
                 int adicionado = pst.executeUpdate();
                 if (adicionado>0){
                     JOptionPane.showMessageDialog(null,"Dados do usuário alterado com sucesso!");
-                    txtId.setText(null);
-                    txtNome.setText(null);
-                    txtFone.setText(null);
-                    txtEndereco.setText(null);
-                    txtEmail.setText(null);
+                    limpar();
                 }
             }
         } catch (Exception e) {
@@ -108,11 +107,7 @@ public class TelaClientes extends javax.swing.JInternalFrame {
                 int apagado = pst.executeUpdate();
                 if (apagado > 0){
                     JOptionPane.showMessageDialog(null, "Usuário removido com sucesso!");
-                    txtId.setText(null);
-                    txtNome.setText(null);
-                    txtFone.setText(null);
-                    txtEndereco.setText(null);
-                    txtEmail.setText(null);
+                    limpar();
                 }
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e);
@@ -146,6 +141,7 @@ public class TelaClientes extends javax.swing.JInternalFrame {
         tblClientes = new javax.swing.JTable();
         txtId = new javax.swing.JTextField();
 
+        setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
@@ -196,9 +192,10 @@ public class TelaClientes extends javax.swing.JInternalFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Nome", "Endereço", "Telefone"
             }
         ));
+        tblClientes.setEnabled(false);
         tblClientes.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblClientesMouseClicked(evt);
